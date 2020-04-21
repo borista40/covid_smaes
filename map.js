@@ -90,12 +90,12 @@ function calcRadius(val) {
 //// Estilo estados y población
 
 function edocolor(d) {
-    return d > 12268096 ? '#253494' :
-           d > 9360329  ? '#2c7fb8' :
-           d > 6452561  ? '#41b6c4' :
-           d > 3544794  ? '#a1dab4' :
-           d > 637026   ? ' #c7e9b4' :
-                      '#FFEDA0';
+    return d > 12268096 ? '#d73027' :
+           d > 9360329  ? '#fdae61' :
+           d > 6452561  ? '#e0f3f8' :
+           d > 3544794  ? '#74add1' :
+           d > 637025   ? ' #4575b4' :
+                      '#4575b4';
 }
 
 //// Estilos de capas
@@ -130,7 +130,7 @@ function edopob_style(feature) {
         opacity: 1,
         color: 'black',
         dashArray: '1',
-        fillOpacity: 0.35
+        fillOpacity: 0.8
     };
 }
 
@@ -154,6 +154,27 @@ legend.onAdd = function(map) {
 };
 
 
+////// LEYENDA DE Población por estados
+
+
+var legendest = L.control({ position: "bottomleft" });
+
+legendest.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Población Total</h4>";
+  div.innerHTML += '<i style="background: #4575b4"></i><span>637,026 - 3,544,793</span><br>';
+  div.innerHTML += '<i style="background: #74add1"></i><span>3,544,794 - 6,452,560</span><br>';
+  div.innerHTML += '<i style="background: #e0f3f8"></i><span>6,452,561 - 9,360,328</span><br>';
+  div.innerHTML += '<i style="background: #fdae61"></i><span>9,360,329 - 12,268,095</span><br>';
+  div.innerHTML += '<i style="background: #d73027"></i><span>12,268,096 - 15,175,862</span><br>';
+  return div;
+};
+
+
+//// Estilos de capas
+
+
+
 ////apaga/enciende leyenda al activar capa COVID-19
 map.on('overlayadd', function (eventLayer) {
 	if (eventLayer.name == '<b>Centros COVID-19</b>') {
@@ -170,13 +191,13 @@ map.on('overlayremove', function (eventLayer) {
 ////apaga/enciende leyenda al activar capa ESTADOS-POBLACIÓN
 map.on('overlayadd', function (eventLayer) {
 	if (eventLayer.name == '<b>Población por estados</b>') {
-		legend.addTo(map);
+		legendest.addTo(map);
     } 
 });
 
 map.on('overlayremove', function (eventLayer) {
 	if (eventLayer.name =='<b>Población por estados</b>') {
-        legend.remove(map);
+        legendest.remove(map);
     } 	
 });
 
