@@ -45,41 +45,16 @@ var hospitales = L.layerGroup([]);
 
 var covid = L.layerGroup([]);
 var municipios = L.layerGroup([]);
-
+var estadopob = L.layerGroup([]);
 
 var overlayMaps = {
+	"<b>Población por estados</b>": estadopob,
 	"<b>Municipios</b>": municipios,
     "<b>Hospitales</b>": hospitales,
 	"<b>Centros COVID-19</b>": covid
 };
 
 L.control.layers(baseMaps,overlayMaps).addTo (map);
-
-//// Estils de capas
-
-function edo_style(feature) {
-    return {
-        fillColor: 'white',
-        weight: 1.5,
-        opacity: 1,
-        color: 'black',
-        dashArray: '1',
-        fillOpacity: 0.35
-    };
-}
-
-
-function mun_style(feature) {
-    return {
-        fillColor: 'white',
-        weight: 0.5,
-        opacity: 1,
-        color: 'black',
-        dashArray: '1',
-        fillOpacity: 0.35
-    };
-}
-
 
 
 
@@ -111,26 +86,60 @@ function calcRadius(val) {
     return 2 * Math.pow(val/minValue, 2) * minRadius;  
 }
 
-////// LEYENDA DE Hospitales
-/*
-var hospitaleslegend = L.control({position: "bottomleft"});
-	hospitaleslegend.onAdd = function (map) {
-		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [1, 2, 3],
-			labels = ["<b> ATENCIÓN POR FASE-COVID 19</b>"],
-			from, to;
-		for (var i = 0; i < grades.length; i++) {
-			from = grades[i];
-			to = grades[i + 0.6];
-			labels.push(
-				'<i style="background:' + Colorhospital(from + 0.6) + ' "></i> ' + 
-				from + (to ? +  to: ' - ') + (to ? +  to: from + 1));
-		}
-		div.innerHTML = labels.join('<br>');
-		return div;
-}; hospitaleslegend.addTo(map)
 
-*/
+//// Estilo estados y población
+
+function edocolor(d) {
+    return d > 12268096 ? '#253494' :
+           d > 9360329  ? '#2c7fb8' :
+           d > 6452561  ? '#41b6c4' :
+           d > 3544794  ? '#a1dab4' :
+           d > 637026   ? ' #c7e9b4' :
+                      '#FFEDA0';
+}
+
+//// Estilos de capas
+
+function edo_style(feature) {
+    return {
+        fillColor: 'white',
+        weight: 1.5,
+        opacity: 1,
+        color: 'black',
+        dashArray: '1',
+        fillOpacity: 0.35
+    };
+}
+
+
+function mun_style(feature) {
+    return {
+        fillColor: 'white',
+        weight: 0.5,
+        opacity: 1,
+        color: 'black',
+        dashArray: '1',
+        fillOpacity: 0.35
+    };
+}
+
+function edopob_style(feature) {
+    return {
+        fillColor: edocolor(feature.properties.Pob_Total),
+        weight: 1,
+        opacity: 1,
+        color: 'black',
+        dashArray: '1',
+        fillOpacity: 0.35
+    };
+}
+
+
+
+
+
+////// LEYENDA DE Hospitales
+
 
 var legend = L.control({ position: "bottomleft" });
 
@@ -157,6 +166,20 @@ map.on('overlayremove', function (eventLayer) {
         legend.remove(map);
     } 	
 });
+
+////apaga/enciende leyenda al activar capa ESTADOS-POBLACIÓN
+map.on('overlayadd', function (eventLayer) {
+	if (eventLayer.name == '<b>Población por estados</b>') {
+		legend.addTo(map);
+    } 
+});
+
+map.on('overlayremove', function (eventLayer) {
+	if (eventLayer.name =='<b>Población por estados</b>') {
+        legend.remove(map);
+    } 	
+});
+
 
 
 //// Funciones de información por municipio
@@ -237,7 +260,8 @@ function popUpInfo (feature, layer) {
 		layer.bindPopup("<b>Nombre de la unidad :</b>  "+ 
 		feature.properties.UNIDAD+"<br><b>Institución :</b> "+
 		feature.properties.NOMBRE_INS+"<br><b>Total de camas :</b>  "+
-		feature.properties.TOTAL_CAMA+"<br><b>ATENCION COVID-FASE1 :</b> "+
+		feature.properties.TOTAL_CAMA+"<br><b>NÚMERO DE CASOS COVID-19 :</b> "+
+		feature.properties.RES_MUN_18+"<br><b>ATENCION COVID-FASE1 :</b> "+
 		feature.properties.FASE_1_COV+"<br><b>ATENCION COVID-FASE 2 :</b> "+
 		feature.properties.FASE_2_COV+"<br><b>ATENCION COVID-FASE 3 :</b> "+
 		feature.properties.FASE_3_COV+"<br><b>ESTADO :</b> "+
@@ -254,6 +278,11 @@ function popUpInfo (feature, layer) {
 L.geoJson(estados, {
 	style: edo_style
 }).addTo(map);
+
+/////estados-población
+L.geoJson(estados, {
+	style: edopob_style
+}).addTo(estadopob);
 
 /////municipios
 L.geoJson(municipios1, {
@@ -284,108 +313,3 @@ L.geoJson(hospitales1, {
 	});
 	}
 }).addTo(covid);
-
-
-/*
-///// OPCIONES   PARA AGREGAR CSV CON OMNIVORE
-/////  OPCION 1
-
-omnivore.csv('https://raw.githubusercontent.com/GMCentroGeo/COVID-19/master/cvd_v3.csv').addTo(hospitales);
-
-
-/////  OPCION 2
-//// OTRA OPCIÓN PARA AGREGAR CSV CON OMNIVORE
-  var customLayer = L.geoJson(null, {
-    onEachFeature: function(feature, layer) {
-      layer.bindPopup(feature.properties.Title);
-      }
-  });
-
-  var runLayer = omnivore.csv('https://raw.githubusercontent.com/GMCentroGeo/COVID-19/master/cvd_v3.csv', null, customLayer)
-      .on('ready', function() {
-          // http://leafletjs.com/reference.html#map-fitbounds
-          map.fitBounds(runLayer.getBounds());
-      })
-      .addTo(hospitales);
-*/
-
-
-/*
-L.geoJson(clues, {
-	onEachFeature: popUpInfo,
-	style: Styleclues,
-	pointToLayer: function (feature, latlng) {
-	return L.circleMarker(latlng, {
-		radius: calcRadius(feature.properties.mag)
-    });
-	}
-}).addTo(hospitales);  */
-/*
-L.geoJson(clues2, {
-	onEachFeature: popUpInfo,
-	style: Styleclues
-	
-}).addTo(otros);
-
-*/
-
-///// Capa de Huracanes   -->  SE AGREGA CAPA DE HURACANES CON LAS CARACTERISTICAS DE POPUP, COLOR, TAMAÑO
-/*
-L.geoJson(tormentas1, {
-	onEachFeature: popUpHur,
-	style: styleh,
-	pointToLayer: function (feature, latlng) {
-	}
-}).addTo(hospitales2);
-*/
-///// Simbologías   
-/*
-///SISMOS
-var sismolegend = L.control({position: "bottomleft"});
-	sismolegend.onAdd = function (map) {
-		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [4.4, 5.0, 5.6, 6.2, 6.8],
-			labels = ["<b> Magnitud de los sismos en escala de Richter</b>"],
-			from, to;
-		for (var i = 0; i < grades.length; i++) {
-			from = grades[i];
-			to = grades[i + 0.6];
-			labels.push(
-				'<i style="background:' + Colorsismos(from + 0.6) + ' "></i> ' + 
-				from + (to ? +  to: ' - ') + (to ? +  to: from + 0.5));
-		}
-		div.innerHTML = labels.join('<br>');
-		return div;
-}; 
-
-///CICLONES                                                
-var ciclonlegend = L.control({position: "bottomright"});
-	ciclonlegend.onAdd = function (map) {
-		var div = L.DomUtil.create('div', 'info legend');
-		  div.innerHTML += "<b> Clasificacion de ciclones tropicales</b></br>";
-		  div.innerHTML += '<de style="background: #fa9dc2"></de><span>Perturbación tropical</span><br>';
-		  div.innerHTML += '<de style="background: #f768a1"></de><span>Depresión tropical</span><br>';
-		  div.innerHTML += '<de style="background: #ae017e"></de><span>Tormenta tropical</span><br>';
-		  div.innerHTML += '<de style="background: #7a0177"></de><span>Huracán</span><br>';
-		  div.innerHTML += '<de style="background: #fcc5c0"></de><span>Evento disipado</span><br>';
-		return div;
-};
-
-/// PARA APARECER/DESAPARECER SIMBOLOGÍAS
-
-map.on('overlayadd', function (eventLayer) {
-	if (eventLayer.name == '<b>Fenómenos Geológicos</b>') {
-		sismolegend.addTo(map);
-    } else if (eventLayer.name == '<b>Fenómenos Hidrometeorológicos</b>') { 
-		ciclonlegend.addTo(map);
-	}
-});
-
-map.on('overlayremove', function (eventLayer) {
-	if (eventLayer.name =='<b>Fenómenos Geológicos</b>') {
-        sismolegend.remove(map);
-    } else if (eventLayer.name == '<b>Fenómenos Hidrometeorológicos</b>') { 
-        ciclonlegend.remove(map);
-	}	
-});
-*/
