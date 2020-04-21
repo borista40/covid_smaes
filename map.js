@@ -263,6 +263,7 @@ L.geoJson(municipios1, {
 
 
 /////todos los centros médicos
+/*
 L.geoJson(BD_hospitales, {
 	onEachFeature: popUpInfo,
 	style: style,
@@ -271,7 +272,7 @@ L.geoJson(BD_hospitales, {
 		radius:5
 	});
 	}
-}).addTo(hospitales);   
+}).addTo(hospitales);   */
 
 /////centros médicos que dan atención al COVID-19
 L.geoJson(hospitales1, {
