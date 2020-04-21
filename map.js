@@ -1,6 +1,6 @@
 ///// Mapas base
 
-var osm = L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+var osm = L.tileLayer('http://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
 {attribution: 'Map Data &copy; OpenstreetMap contributors'}); 
 
 var terrain = new L.StamenTileLayer("terrain");
