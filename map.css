@@ -1,0 +1,101 @@
+#map {
+	height: 100%;
+	width: 100%;
+}
+.info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+.info h4 {
+    margin: 0 0 5px;
+    color: #777;
+}
+
+.legend {
+	padding: 10px 10px;
+	font: 14px/16px Arial, Helvetica, sans-serif;
+	background: white;
+	background: rgba(255,255,255,0.9);
+	box-shadow: 0 0 15px rgba(0,0,0,0.3);
+	border-radius: 20px;
+}
+
+.legend {
+	line-height: 30px;
+	color: black;
+}
+
+.legend i {
+	width: 25px;
+	height: 25px;
+	float: left;
+	margin-right: 15px;
+	opacity: 0.5;
+}
+
+.legend di {
+	width: 50px;
+	height: 3px;
+	float: left;
+	margin-right: 15px;
+	margin-top: 13px;
+	opacity: 0.5;
+}
+
+.legend de {
+	width: 50px;
+	height: 3.7px;
+	float: left;
+	margin-right: 15px;
+	margin-top: 13px;
+	opacity: 0.5;
+}
+
+.legend to {
+	width: 50px;
+	height: 5px;
+	float: left;
+	margin-right: 15px;
+	margin-top: 13px;
+	opacity: 0.5;
+}
+
+.legend hu {
+	width: 50px;
+	height: 7px;
+	float: left;
+	margin-right: 15px;
+	margin-top: 13px;
+	opacity: 0.5;
+}
+
+.legend dis {
+	width: 50px;
+	height: 2px;
+	float: left;
+	margin-right: 15px;
+	margin-top: 13px;
+	opacity: 0.5;
+}
+
+.leaflet-popup-tip-container {
+	width: 40px;
+	height: 20px;
+	left: 0%;
+}
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
