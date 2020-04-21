@@ -130,7 +130,7 @@ function edopob_style(feature) {
         opacity: 1,
         color: 'black',
         dashArray: '1',
-        fillOpacity: 0.8
+        fillOpacity: 0.7
     };
 }
 
