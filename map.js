@@ -46,12 +46,18 @@ var hospitales = L.layerGroup([]);
 var covid = L.layerGroup([]);
 var municipios = L.layerGroup([]);
 var estadopob = L.layerGroup([]);
+var covidf1 = L.layerGroup([]);
+var covidf2 = L.layerGroup([]);
+var covidf3 = L.layerGroup([]);
 
 var overlayMaps = {
 	"<b>Población por estados</b>": estadopob,
 	"<b>Municipios</b>": municipios,
     "<b>Hospitales</b>": hospitales,
-	"<b>Centros COVID-19</b>": covid
+	"<b>Centros COVID-19</b>": covid,
+	"<b>Centros COVID-19 Fase 1</b>": covidf1,
+	"<b>Centros COVID-19 Fase 2</b>": covidf2,
+	"<b>Centros COVID-19 Fase 3</b>": covidf3
 };
 
 L.control.layers(baseMaps,overlayMaps).addTo (map);
@@ -130,12 +136,28 @@ function edopob_style(feature) {
         opacity: 1,
         color: 'black',
         dashArray: '1',
-        fillOpacity: 0.7
+        fillOpacity: 0.8
     };
 }
 
+//// estilo puntos por fase
+var colorfase1 = {
+    "color": "#ffeda0", 
+    "weight": 5,
+    "opacity": 0.8
+};
 
+var colorfase2 = {
+    "color": "#fc8d59",
+    "weight": 5,
+    "opacity": 0.5
+};
 
+var colorfase3 = {
+    "color": "#990000",
+    "weight": 5,
+    "opacity": 0.65
+};
 
 
 ////// LEYENDA DE Hospitales
@@ -278,10 +300,27 @@ munlegend.addTo(map);
 
 function popUpInfo (feature, layer) {
 	if (feature.properties && feature.properties.UNIDAD){
-		layer.bindPopup("<b>Nombre de la unidad :</b>  "+ 
-		feature.properties.UNIDAD+"<br><b>Institución :</b> "+
-		feature.properties.NOMBRE_INS+"<br><b>Total de camas :</b>  "+
-		feature.properties.TOTAL_CAMA+"<br><b>NÚMERO DE CASOS COVID-19 :</b> "+
+		layer.bindPopup("<b>NOMBRE DE LA UNIDAD :</b>  "+ 
+		feature.properties.UNIDAD+"<br><b>INSTITUCIÓN :</b> "+
+		feature.properties.NOMBRE_INS+"<br><b>TOTAL DE CAMAS :</b>  "+
+		feature.properties.TOTAL_CAMA+"<br><b>NÚMERO DE CASOS POR MUNICIPIO :</b> "+
+		feature.properties.RES_MUN_18+"<br><b>ATENCION COVID-FASE1 :</b> "+
+		feature.properties.FASE_1_COV+"<br><b>ATENCION COVID-FASE 2 :</b> "+
+		feature.properties.FASE_2_COV+"<br><b>ATENCION COVID-FASE 3 :</b> "+
+		feature.properties.FASE_3_COV+"<br><b>ESTADO :</b> "+
+		feature.properties.ESTADO+"<br><b>MUNICIPIO :</b> "+
+		feature.properties.MUNICIPIO+"<br><b>POBLACIÓN ESTATAL :</b> "+
+		feature.properties.POB_ENT+"<br><b>POBLACIÓN MUNICIPAL :</b> "+
+		feature.properties.POB_MUN);
+	}
+}
+
+///// POPup de puntos por fase
+
+function popUpInfo2 (feature, layer) {
+	if (feature.properties && feature.properties.UNIDAD){
+		layer.bindPopup("<b>NOMBRE DE LA UNIDAD :</b>  "+ 
+		feature.properties.UNIDAD+"<br><b>NÚMERO DE CASOS POR MUNICIPIO :</b> "+
 		feature.properties.RES_MUN_18+"<br><b>ATENCION COVID-FASE1 :</b> "+
 		feature.properties.FASE_1_COV+"<br><b>ATENCION COVID-FASE 2 :</b> "+
 		feature.properties.FASE_2_COV+"<br><b>ATENCION COVID-FASE 3 :</b> "+
@@ -333,4 +372,47 @@ L.geoJson(hospitales1, {
 		radius:10
 	});
 	}
-}).addTo(covid);
+}).addTo(covid); 	
+
+
+/////centros médicos que dan atención al COVID-19 en la fase 1
+L.geoJson(hospitales1, {
+	filter:function (feature,layer){
+      if (feature.properties.ESTADO_FAS == 1) {return  'true'}
+     },
+	onEachFeature: popUpInfo2,
+	style: colorfase1,
+	pointToLayer: function (feature, latlng){
+	return L.circleMarker (latlng, {
+		radius:10
+	});
+	}
+}).addTo(covidf1); 	
+
+/////centros médicos que dan atención al COVID-19 en la fase 2
+L.geoJson(hospitales1, {
+	filter:function (feature,layer){
+      if (feature.properties.ESTADO_FAS == 2) {return  'true'}
+     },
+	onEachFeature: popUpInfo2,
+	style: colorfase2,
+	pointToLayer: function (feature, latlng){
+	return L.circleMarker (latlng, {
+		radius:10
+	});
+	}
+}).addTo(covidf2); 	
+
+/////centros médicos que dan atención al COVID-19 en la fase 3
+L.geoJson(hospitales1, {
+	filter:function (feature,layer){
+      if (feature.properties.ESTADO_FAS == 3) {return  'true'}
+     },
+	onEachFeature: popUpInfo2,
+	style: colorfase3,
+	pointToLayer: function (feature, latlng){
+	return L.circleMarker (latlng, {
+		radius:10
+	});
+	}
+}).addTo(covidf3); 
