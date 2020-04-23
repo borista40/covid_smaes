@@ -52,7 +52,7 @@ var covidf3 = L.layerGroup([]);
 
 var overlayMaps = {
 	"<b>Población por estados</b>": estadopob,
-	"<b>Municipios</b>": municipios,
+	"<b>Casos por Municipios</b>": municipios,
     "<b>Hospitales</b>": hospitales,
 	"<b>Centros COVID-19</b>": covid,
 	"<b>Centros COVID-19 Fase 1</b>": covidf1,
@@ -96,12 +96,12 @@ function calcRadius(val) {
 //// Estilo estados y población
 
 function edocolor(d) {
-    return d > 12268096 ? '#d73027' :
-           d > 9360329  ? '#fdae61' :
-           d > 6452561  ? '#e0f3f8' :
-           d > 3544794  ? '#74add1' :
-           d > 637025   ? ' #4575b4' :
-                      '#4575b4';
+    return d > 12268096 ? '#004529' :
+           d > 9360329  ? '#238443' :
+           d > 6452561  ? '#78c679' :
+           d > 3544794  ? '#d9f0a3' :
+           d > 637025   ? ' #f7fcb9' :
+                      '#f7fcb9';
 }
 
 //// Estilos de capas
@@ -117,15 +117,27 @@ function edo_style(feature) {
     };
 }
 
+function municolor(d) {
+    return d > 443 ? '#005824' :
+           d > 100  ? '#238b45' :
+           d > 50  ? '#41ae76' :
+           d > 10  ? '#99d8c9' :
+           d > 5  ? ' #99d8c9' :
+		   d > 1  ? ' #f7fcfd' :
+                      '#f7fcfd';
+}
+
+
+
 
 function mun_style(feature) {
     return {
-        fillColor: 'white',
+        fillColor: municolor(feature.properties.RES_MUN_20),
         weight: 0.5,
         opacity: 1,
         color: 'black',
         dashArray: '1',
-        fillOpacity: 0.35
+        fillOpacity: 0.8
     };
 }
 
@@ -136,7 +148,7 @@ function edopob_style(feature) {
         opacity: 1,
         color: 'black',
         dashArray: '1',
-        fillOpacity: 0.8
+        fillOpacity: 0.6
     };
 }
 
@@ -179,19 +191,36 @@ legend.onAdd = function(map) {
 ////// LEYENDA DE Población por estados
 
 
+var legendmun = L.control({ position: "bottomleft" });
+
+legendmun.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Población Total</h4>";
+  div.innerHTML += '<i style="background: #f7fcfd"></i><span>0 - 1</span><br>';
+  div.innerHTML += '<i style="background: #99d8c9"></i><span>1 - 5</span><br>';
+  div.innerHTML += '<i style="background: #99d8c9"></i><span>5 - 10</span><br>';
+  div.innerHTML += '<i style="background: #41ae76"></i><span>10 - 50</span><br>';
+  div.innerHTML += '<i style="background: #238b45"></i><span>50 - 100</span><br>';
+  div.innerHTML += '<i style="background: #005824"></i><span> > 100</span><br>';
+  return div;
+};
+
+
+////// LEYENDA DE municipios-casos
+
+
 var legendest = L.control({ position: "bottomleft" });
 
 legendest.onAdd = function(map) {
   var div = L.DomUtil.create("div", "legend");
-  div.innerHTML += "<h4>Población Total</h4>";
-  div.innerHTML += '<i style="background: #4575b4"></i><span>637,026 - 3,544,793</span><br>';
-  div.innerHTML += '<i style="background: #74add1"></i><span>3,544,794 - 6,452,560</span><br>';
-  div.innerHTML += '<i style="background: #e0f3f8"></i><span>6,452,561 - 9,360,328</span><br>';
-  div.innerHTML += '<i style="background: #fdae61"></i><span>9,360,329 - 12,268,095</span><br>';
-  div.innerHTML += '<i style="background: #d73027"></i><span>12,268,096 - 15,175,862</span><br>';
+  div.innerHTML += "<h4>Número de casos</h4>";
+  div.innerHTML += '<i style="background: #f7fcb9"></i><span>637,026 - 3,544,793</span><br>';
+  div.innerHTML += '<i style="background: #d9f0a3"></i><span>3,544,794 - 6,452,560</span><br>';
+  div.innerHTML += '<i style="background: #78c679"></i><span>6,452,561 - 9,360,328</span><br>';
+  div.innerHTML += '<i style="background: #238443"></i><span>9,360,329 - 12,268,095</span><br>';
+  div.innerHTML += '<i style="background: #004529"></i><span>12,268,096 - 15,175,862</span><br>';
   return div;
 };
-
 
 //// Estilos de capas
 
@@ -223,6 +252,19 @@ map.on('overlayremove', function (eventLayer) {
     } 	
 });
 
+ 
+////apaga/enciende leyenda al activar capa MUNICIPIOS-CASOS     "<b>Casos por Municipios</b>": municipios,
+map.on('overlayadd', function (eventLayer) {
+	if (eventLayer.name == '<b>Casos por Municipios</b>') {
+		legendmun.addTo(map);
+    } 
+});
+
+map.on('overlayremove', function (eventLayer) {
+	if (eventLayer.name =='<b>Casos por Municipios</b>') {
+        legendmun.remove(map);
+    } 	
+});
 
 
 //// Funciones de información por municipio
@@ -332,6 +374,17 @@ function popUpInfo2 (feature, layer) {
 	}
 }
 
+///// POPup de casos por municipios
+
+function popUpInfo3 (feature, layer) {
+	if (feature.properties && feature.properties.NOMGEO){
+		layer.bindPopup("<b>MUNICIPIO :</b>  "+ 
+		feature.properties.NOMGEO+"<br><b>NÚMERO DE CASOS :</b> "+
+		feature.properties.RES_MUN_20);
+	}
+}
+
+
 
 ///// Capa de hospitales y municipios -->  SE AGREGA CAPA CON LAS CARACTERISTICAS DE POPUP, COLOR, TAMAÑO
 /////estados
@@ -345,14 +398,15 @@ L.geoJson(estados, {
 }).addTo(estadopob);
 
 /////municipios
-L.geoJson(municipios1, {
+L.geoJson(municipios_casos, {
+	onEachFeature: popUpInfo3,
 	style: mun_style
 	
 }).addTo(municipios);
 
 
 /////todos los centros médicos
-/*
+
 L.geoJson(BD_hospitales, {
 	onEachFeature: popUpInfo,
 	style: style,
@@ -361,7 +415,7 @@ L.geoJson(BD_hospitales, {
 		radius:5
 	});
 	}
-}).addTo(hospitales);   */
+}).addTo(hospitales);   
 
 /////centros médicos que dan atención al COVID-19
 L.geoJson(hospitales1, {
@@ -415,4 +469,4 @@ L.geoJson(hospitales1, {
 		radius:10
 	});
 	}
-}).addTo(covidf3); 
+}).addTo(covidf3); 	
