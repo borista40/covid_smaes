@@ -41,7 +41,7 @@ var baseMaps = {
 
 /////controladores de capas 
 
-var hospitales = L.layerGroup([]);
+////var hospitales = L.layerGroup([]);
 
 var covid = L.layerGroup([]);
 var municipios = L.layerGroup([]);
@@ -53,7 +53,7 @@ var covidf3 = L.layerGroup([]);
 var overlayMaps = {
 	"<b>Población por estados</b>": estadopob,
 	"<b>Casos por Municipios</b>": municipios,
-    "<b>Hospitales</b>": hospitales,
+   /////// "<b>Hospitales</b>": hospitales,
 	"<b>Centros COVID-19</b>": covid,
 	"<b>Centros COVID-19 Fase 1</b>": covidf1,
 	"<b>Centros COVID-19 Fase 2</b>": covidf2,
@@ -406,7 +406,7 @@ L.geoJson(municipios_casos, {
 
 
 /////todos los centros médicos
-
+/*
 L.geoJson(BD_hospitales, {
 	onEachFeature: popUpInfo,
 	style: style,
@@ -415,7 +415,7 @@ L.geoJson(BD_hospitales, {
 		radius:5
 	});
 	}
-}).addTo(hospitales);   
+}).addTo(hospitales);   */
 
 /////centros médicos que dan atención al COVID-19
 L.geoJson(hospitales1, {
@@ -469,4 +469,4 @@ L.geoJson(hospitales1, {
 		radius:10
 	});
 	}
-}).addTo(covidf3); 	
+}).addTo(covidf3); 
