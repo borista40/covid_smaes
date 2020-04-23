@@ -188,14 +188,14 @@ legend.onAdd = function(map) {
 };
 
 
-////// LEYENDA DE Población por estados
+////// LEYENDA DE municipios-caso
 
 
 var legendmun = L.control({ position: "bottomleft" });
 
 legendmun.onAdd = function(map) {
   var div = L.DomUtil.create("div", "legend");
-  div.innerHTML += "<h4>Población Total</h4>";
+  div.innerHTML += "<h4>Número de casos</h4>";
   div.innerHTML += '<i style="background: #f7fcfd"></i><span>0 - 1</span><br>';
   div.innerHTML += '<i style="background: #99d8c9"></i><span>1 - 5</span><br>';
   div.innerHTML += '<i style="background: #99d8c9"></i><span>5 - 10</span><br>';
@@ -206,14 +206,14 @@ legendmun.onAdd = function(map) {
 };
 
 
-////// LEYENDA DE municipios-casos
+////// LEYENDA DE Población por estados
 
 
 var legendest = L.control({ position: "bottomleft" });
 
 legendest.onAdd = function(map) {
   var div = L.DomUtil.create("div", "legend");
-  div.innerHTML += "<h4>Número de casos</h4>";
+  div.innerHTML += "<h4>Población Total</h4>";
   div.innerHTML += '<i style="background: #f7fcb9"></i><span>637,026 - 3,544,793</span><br>';
   div.innerHTML += '<i style="background: #d9f0a3"></i><span>3,544,794 - 6,452,560</span><br>';
   div.innerHTML += '<i style="background: #78c679"></i><span>6,452,561 - 9,360,328</span><br>';
