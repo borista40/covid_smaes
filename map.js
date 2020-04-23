@@ -1,6 +1,6 @@
 ///// Mapas base
 
-var osm = L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+var osm = L.tileLayer('http://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
 {attribution: 'Map Data &copy; OpenstreetMap contributors'}); 
 
 var terrain = new L.StamenTileLayer("terrain");
@@ -11,34 +11,21 @@ var map = L.map('map',{
     layers:[terrain]
 });
 
-var googleTerrain = L.tileLayer('https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',{
-    maxZoom: 20,
-    subdomains:['mt0','mt1','mt2','mt3']
-}).addTo (map);
-
-var googleSat = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
-    maxZoom: 20,
-    subdomains:['mt0','mt1','mt2','mt3']
-}).addTo (map);
-
-var googleStreets = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
-    maxZoom: 20,
-    subdomains:['mt0','mt1','mt2','mt3']
-}).addTo (map);
-
+var Carto_Dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	subdomains: 'abcd',
+	maxZoom: 19
+});
 
 var carto = L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",{
 		"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"http://cartodb.com/attributions\"\u003eCartoDB\u003c/a\u003e, CartoDB \u003ca href =\"http://cartodb.com/attributions\"\u003eattributions\u003c/a\u003e", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
 ).addTo (map);
 
-var baseMaps = {
-	"<b>Mapa de calles</b>": googleStreets,
-	"<b>Imagen de satélite</b>": googleSat,
-	"<b>Mapa de relieve</b>": googleTerrain,
-	"<b>Mapa de terreno</b>": terrain, 
-	"<b>Mapa en tonos claros</b>": carto,
-};
 
+var baseMaps = {
+	"<b>Mapa en tono oscuro</b>": Carto_Dark,
+	"<b>Mapa en tono claros</b>": carto,
+};
 /////controladores de capas 
 
 ////var hospitales = L.layerGroup([]);
@@ -346,7 +333,7 @@ function popUpInfo (feature, layer) {
 		feature.properties.UNIDAD+"<br><b>INSTITUCIÓN :</b> "+
 		feature.properties.NOMBRE_INS+"<br><b>TOTAL DE CAMAS :</b>  "+
 		feature.properties.TOTAL_CAMA+"<br><b>NÚMERO DE CASOS POR MUNICIPIO :</b> "+
-		feature.properties.RES_MUN_18+"<br><b>ATENCION COVID-FASE1 :</b> "+
+		feature.properties.RES_MUN_20+"<br><b>ATENCION COVID-FASE1 :</b> "+
 		feature.properties.FASE_1_COV+"<br><b>ATENCION COVID-FASE 2 :</b> "+
 		feature.properties.FASE_2_COV+"<br><b>ATENCION COVID-FASE 3 :</b> "+
 		feature.properties.FASE_3_COV+"<br><b>ESTADO :</b> "+
