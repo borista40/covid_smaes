@@ -119,7 +119,7 @@ function municolor(d) {
 
 function mun_style(feature) {
     return {
-        fillColor: municolor(feature.properties.RES_MUN_20),
+        fillColor: municolor(feature.properties.CASOS_ACT),
         weight: 0.5,
         opacity: 1,
         color: 'black',
@@ -367,7 +367,7 @@ function popUpInfo3 (feature, layer) {
 	if (feature.properties && feature.properties.NOMGEO){
 		layer.bindPopup("<b>MUNICIPIO :</b>  "+ 
 		feature.properties.NOMGEO+"<br><b>NÚMERO DE CASOS :</b> "+
-		feature.properties.RES_MUN_20);
+		feature.properties.CASOS_ACT);
 	}
 }
 
