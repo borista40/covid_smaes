@@ -419,7 +419,7 @@ L.geoJson(hospitales, {
 /////centros médicos que dan atención al COVID-19 en la fase 1
 L.geoJson(hospitales, {
 	filter:function (feature,layer){
-      if (feature.properties.ESTADO_FAS == 1) {return  'true'}
+      if (feature.properties.ESTADO_FASE == 1) {return  'true'}
      },
 	onEachFeature: popUpInfo2,
 	style: colorfase1,
@@ -433,7 +433,7 @@ L.geoJson(hospitales, {
 /////centros médicos que dan atención al COVID-19 en la fase 2
 L.geoJson(hospitales, {
 	filter:function (feature,layer){
-      if (feature.properties.ESTADO_FAS == 2) {return  'true'}
+      if (feature.properties.ESTADO_FASE == 2) {return  'true'}
      },
 	onEachFeature: popUpInfo2,
 	style: colorfase2,
@@ -447,7 +447,7 @@ L.geoJson(hospitales, {
 /////centros médicos que dan atención al COVID-19 en la fase 3
 L.geoJson(hospitales, {
 	filter:function (feature,layer){
-      if (feature.properties.ESTADO_FAS == 3) {return  'true'}
+      if (feature.properties.ESTADO_FASE == 3) {return  'true'}
      },
 	onEachFeature: popUpInfo2,
 	style: colorfase3,
