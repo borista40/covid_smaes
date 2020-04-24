@@ -333,7 +333,7 @@ function popUpInfo (feature, layer) {
 		feature.properties.UNIDAD+"<br><b>INSTITUCIÓN :</b> "+
 		feature.properties.NOMBRE_INS+"<br><b>TOTAL DE CAMAS :</b>  "+
 		feature.properties.TOTAL_CAMA+"<br><b>NÚMERO DE CASOS POR MUNICIPIO :</b> "+
-		feature.properties.RES_MUN_20+"<br><b>ATENCION COVID-FASE1 :</b> "+
+		feature.properties.CASOS_ACT+"<br><b>ATENCION COVID-FASE1 :</b> "+
 		feature.properties.FASE_1_COV+"<br><b>ATENCION COVID-FASE 2 :</b> "+
 		feature.properties.FASE_2_COV+"<br><b>ATENCION COVID-FASE 3 :</b> "+
 		feature.properties.FASE_3_COV+"<br><b>ESTADO :</b> "+
@@ -350,7 +350,7 @@ function popUpInfo2 (feature, layer) {
 	if (feature.properties && feature.properties.UNIDAD){
 		layer.bindPopup("<b>NOMBRE DE LA UNIDAD :</b>  "+ 
 		feature.properties.UNIDAD+"<br><b>NÚMERO DE CASOS POR MUNICIPIO :</b> "+
-		feature.properties.RES_MUN_18+"<br><b>ATENCION COVID-FASE1 :</b> "+
+		feature.properties.CASOS_ACT+"<br><b>ATENCION COVID-FASE1 :</b> "+
 		feature.properties.FASE_1_COV+"<br><b>ATENCION COVID-FASE 2 :</b> "+
 		feature.properties.FASE_2_COV+"<br><b>ATENCION COVID-FASE 3 :</b> "+
 		feature.properties.FASE_3_COV+"<br><b>ESTADO :</b> "+
@@ -405,7 +405,7 @@ L.geoJson(BD_hospitales, {
 }).addTo(hospitales);   */
 
 /////centros médicos que dan atención al COVID-19
-L.geoJson(hospitales1, {
+L.geoJson(hospitales, {
 	onEachFeature: popUpInfo,
 	style: style,
 	pointToLayer: function (feature, latlng){
@@ -417,7 +417,7 @@ L.geoJson(hospitales1, {
 
 
 /////centros médicos que dan atención al COVID-19 en la fase 1
-L.geoJson(hospitales1, {
+L.geoJson(hospitales, {
 	filter:function (feature,layer){
       if (feature.properties.ESTADO_FAS == 1) {return  'true'}
      },
@@ -431,7 +431,7 @@ L.geoJson(hospitales1, {
 }).addTo(covidf1); 	
 
 /////centros médicos que dan atención al COVID-19 en la fase 2
-L.geoJson(hospitales1, {
+L.geoJson(hospitales, {
 	filter:function (feature,layer){
       if (feature.properties.ESTADO_FAS == 2) {return  'true'}
      },
@@ -445,7 +445,7 @@ L.geoJson(hospitales1, {
 }).addTo(covidf2); 	
 
 /////centros médicos que dan atención al COVID-19 en la fase 3
-L.geoJson(hospitales1, {
+L.geoJson(hospitales, {
 	filter:function (feature,layer){
       if (feature.properties.ESTADO_FAS == 3) {return  'true'}
      },
